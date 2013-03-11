@@ -3,6 +3,7 @@ import java.net.*;
 import java.util.regex.*;
 import java.io.File;
 //  import java.nio.*;
+//	import java.nio.files.*;
 public class fileshortcut
 {
 	public static void main(String[] args) throws IOException
@@ -22,14 +23,12 @@ public class fileshortcut
 			System.out.println(f.getName());
 			String link="http://www.rottentomatoes.com/m/"+m2.group(1).replaceAll(" ","_");		//link to open and read genre
 			URL rotten=new URL(link);
-			InputStreamReader obj=new InputStreamReader(rotten.openStream());		
-
-//to read content of webpage 
+			InputStreamReader obj=new InputStreamReader(rotten.openStream());		//to read content of webpage 
 			BufferedReader in= new BufferedReader(obj);
 			String line;
 			String pat=".genre.>(\\w+)<";		//pattern to be matched from html of that page <span itemprop="genre">comedy</span>
 			while((line=in.readLine())!=null)		//will read html of the page
-			{	
+			{	System.out.println(mname);
 				Pattern r=Pattern.compile(pat);		
 				Matcher m=r.matcher(line);
 				if(m.find())
@@ -45,10 +44,10 @@ public class fileshortcut
 				{
 				}
 				
-				/*try
-				{
-					Path orig="./movies/"+f.getName();		//path whose shortcut has to be created
-					Path target="./movies/"+m.group(1);		//path where shrtcut has to be created
+				/*	Path orig=FileSystems.getDefault().getPath("./movies/"+f.getName());		//path whose shortcut has to be created
+					Path target=FileSystems.getDefault().getPath("./movies/"+m.group(1));	//path where shrtcut has to be created
+				try
+				{	
 					Files.createSymbolicLink(target,orig);		//shortcut is creted
 				}
 				catch(IOException x)
