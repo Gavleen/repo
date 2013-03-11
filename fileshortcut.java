@@ -9,34 +9,36 @@ public class fileshortcut
 	{	
 	
 	String mname;	
-	File folder=new File("./movies");
-	File[] allfiles=folder.listFiles();
-	for(File f:allfiles)
+	File folder=new File("./movies");		//path of folder consisting files
+	File[] allfiles=folder.listFiles();		//putting all files on above path into an array
+	for(File f:allfiles)					//for evry file
 	{	
 		mname=f.getName();
-		String pat2="([^\\.]*).*";
+		String pat2="([^\\.]*).*";			//pattern of file name required
 		Pattern r2=Pattern.compile(pat2);
 		Matcher m2=r2.matcher(mname);
 		if(m2.find())
 		{
 			System.out.println(f.getName());
-			String link="http://www.rottentomatoes.com/m/"+m2.group(1).replaceAll(" ","_");
+			String link="http://www.rottentomatoes.com/m/"+m2.group(1).replaceAll(" ","_");		//link to open and read genre
 			URL rotten=new URL(link);
-			InputStreamReader obj=new InputStreamReader(rotten.openStream());		//to read content of webpage 
+			InputStreamReader obj=new InputStreamReader(rotten.openStream());		
+
+//to read content of webpage 
 			BufferedReader in= new BufferedReader(obj);
 			String line;
-			String pat=".genre.>(\\w+)<";		//<span itemprop="genre">comedy</span>
-			while((line=in.readLine())!=null)
+			String pat=".genre.>(\\w+)<";		//pattern to be matched from html of that page <span itemprop="genre">comedy</span>
+			while((line=in.readLine())!=null)		//will read html of the page
 			{	
-				Pattern r=Pattern.compile(pat);
+				Pattern r=Pattern.compile(pat);		
 				Matcher m=r.matcher(line);
 				if(m.find())
 				{
-					System.out.println(m.group(1));
+					System.out.println(m.group(1));		//if patten match genre in printed
 				}
 				try
 				{
-					File o=new File("./movies/"+m.group(1));
+					File o=new File("./movies/"+m.group(1));	//directory of that genre is created
 					o.mkdir();
 				}
 				catch(Exception e)
@@ -45,12 +47,18 @@ public class fileshortcut
 				
 				/*try
 				{
-					Path orig="./movies/"+f.getName();
-					Path target="./movies/"+m.group(1);
-					Files.createSymbolicLink(target,orig);
+					Path orig="./movies/"+f.getName();		//path whose shortcut has to be created
+					Path target="./movies/"+m.group(1);		//path where shrtcut has to be created
+					Files.createSymbolicLink(target,orig);		//shortcut is creted
 				}
-				catch(IOException e)
-				{}*/
+				catch(IOException x)
+				{
+					System.out.println(x);
+				}
+				catch(UnsupportedOperationException x)
+				{	//Some files systems do not support Symbolic link
+					System.out.println(x);
+				}*/
 			}
 		}
 	}
